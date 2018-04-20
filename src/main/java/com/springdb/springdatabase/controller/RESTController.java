@@ -42,6 +42,14 @@ public class RESTController {
         return JsonHelper.toJson(new CustomRespond(employeeList.size() + " row has returned!", 0, employeeList));
     }
 
+    /**
+     * Get all employee name, id, salary by department id
+     */
+    @GetMapping("/empByDepartment={id}")
+    public String getAllEmployeeByDepartmentId(@PathVariable(value = "id")int deId){
+
+    }
+
     //Get all salaryGrade
     @GetMapping("/salaryAll")
     public String getAllSalaryGrade() {
