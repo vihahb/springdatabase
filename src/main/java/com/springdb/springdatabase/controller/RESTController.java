@@ -1,10 +1,6 @@
 package com.springdb.springdatabase.controller;
 
-
-import com.springdb.springdatabase.model.Department;
-import com.springdb.springdatabase.model.Employee;
-import com.springdb.springdatabase.model.SalaryGrade;
-import com.springdb.springdatabase.model.TimeKeeper;
+import com.springdb.springdatabase.model.*;
 import com.springdb.springdatabase.repository.DepartmentRepository;
 import com.springdb.springdatabase.repository.EmployeeRepository;
 import com.springdb.springdatabase.repository.SalaryGradeRepository;
@@ -12,10 +8,7 @@ import com.springdb.springdatabase.repository.TimeKeeperRepository;
 import com.springdb.springdatabase.respond.CustomRespond;
 import com.springdb.springdatabase.utils.JsonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -84,14 +77,30 @@ public class RESTController {
         }
     }
 
-    @GetMapping("/rangeDepartment?startId={startId}&endId={endId}")
-    public String getRangeDepartment(
-            @PathVariable(value = "startId") int startID,
-            @PathVariable(value = "endId") int endID
-    ) {
 
-        List<Department> departmentList = department.findAllByDEPT_ID(startID, endID);
+    /**
+     * Using path param
+     */
+    @GetMapping("/rangeDepartment")
+    public String getRangeDepartment(@RequestParam(value = "sId") int sId, @RequestParam(value = "eId") int eId) {
+
+        System.out.println("Start ID is: " + sId);
+        System.out.println("End ID is: " + eId);
+
+        if (sId < 1) {
+            return JsonHelper.toJson(new CustomRespond("Department start id not null!", 6, null));
+        }
+        if (eId < 1) {
+            return JsonHelper.toJson(new CustomRespond("Department end id not null!", 6, null));
+        }
+        List<Department> departmentList = (List<Department>) department.findAllByDEPT_ID(sId, eId);
         return JsonHelper.toJson(new CustomRespond(departmentList.size() + " row has returned!", 0, departmentList));
+
+//        if (rangeId != null) {
+//
+//        } else {
+//            return JsonHelper.toJson(new CustomRespond("Start and End Id not null!", 1, null));
+//        }
 //        try {
 //            List<Department> departmentList = department.findAllBy(startID, endID);
 //            return JsonHelper.toJson(new CustomRespond(departmentList.size() + " row has returned!", 0, departmentList));
